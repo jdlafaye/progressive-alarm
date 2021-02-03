@@ -12,7 +12,7 @@ button = Button(2)
 
 
 def should_alarm(alarm_time: str) -> bool:
-    return datetime.now() > datetime.strptime(alarm_time, '%Y-%m-%d %H:%M:%S')
+    return datetime.now() > datetime.fromisoformat(alarm_time)
 
 
 def alarm():
