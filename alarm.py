@@ -5,8 +5,9 @@ from time import sleep
 from gpiozero import Button
 from pygame import mixer
 
-ALARMS_FILE = 'alarms.txt'
-SOUND_FILE = 'alarm.wav'
+ALARMS_FILE = '/etc/alarm/alarms.txt'
+SOUND_FILE_1 = '/opt/alarm/alarm1.wav'
+SOUND_FILE_2 = '/opt/alarm/alarm2.wav'
 
 button = Button(2)
 
@@ -16,7 +17,16 @@ def should_alarm(alarm_time: str) -> bool:
 
 
 def alarm():
-    mixer.music.load(SOUND_FILE)
+    mixer.music.load(SOUND_FILE_1)
+    for i in range(2):
+        mixer.music.play()
+        while mixer.music.get_busy():
+            if button.is_pressed:
+                mixer.music.stop()
+                mixer.music.unload()
+                return
+    mixer.music.unload()
+    mixer.music.load(SOUND_FILE_2)
     while True:
         mixer.music.play()
         while mixer.music.get_busy():
